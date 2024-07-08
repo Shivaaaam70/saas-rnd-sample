@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>{{page_title}}</h1>
+<h1>Hello Again</h1>
+
+<p>page visits: {{page_visit_count}}</p>
+<p>Total Visits : {{page_visit_count}}</p>
+
+{{queryset}}
+
+{% endblock content %}
+
+
