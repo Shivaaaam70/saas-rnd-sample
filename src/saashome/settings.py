@@ -144,14 +144,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_BASE_DIRS = BASE_DIR / "staticfiles"
 STATICFILES_VENDOR_DIRS = STATICFILES_BASE_DIRS / "vendors"
 
 #source for python manage.py collectstatic
 
 STATICFILES_DIRS = [
-    STATICFILES_BASE_DIRS
+    STATICFILES_BASE_DIRS  
 ]
 
 
@@ -165,14 +165,14 @@ STATIC_ROOT = BASE_DIR / "local-cdn"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
+# import os
 
-if DEBUG: 
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "templates")]
+# if DEBUG: 
+#     STATICFILES_DIRS = [os.path.join(BASE_DIR, "templates")]
     
-else:
-    STATIC_ROOT = [os.path.join(BASE_DIR, "templates")]
+# else:
+#     STATIC_ROOT = [os.path.join(BASE_DIR, "templates")]
     
-MEDIA_ROOT = [os.path.join(BASE_DIR, "templates")]
+# MEDIA_ROOT = [os.path.join(BASE_DIR, "templates")]
 
 
