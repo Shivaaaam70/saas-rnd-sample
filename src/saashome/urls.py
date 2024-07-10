@@ -16,13 +16,18 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from .views import home_view, about_view
 from django.conf.urls.static import static
+from auths import views as auth_views
+from .views import home_view , about_view
 
 urlpatterns = [
-    path('', home_view),
+    path('', home_view, name="home"),
+    path('login/', auth_views.login_view),
+    path('register/', auth_views.register_view),
     path('admin/', admin.site.urls),
     path('about/', about_view),
     path('hello-world/', home_view),
+    path('accounts/', include('allauth.urls')),
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)

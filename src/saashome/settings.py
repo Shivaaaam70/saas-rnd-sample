@@ -22,6 +22,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 
+
+# Email Config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config("EMAIL_HOST" , cast=str , default= "smtp.gmail.com")
+EMAIL_PORT = config("EMAIL_PORT" , cast=str , default="587")
+EMAIL_USE_TLS = config("Email_USE_TLS" , cast=bool , default = True)
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast= bool , default = False)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER" , cast= str , default = None)
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD" , cast=str , default=None)
+
+
+ADMIN_USER_NAME = config("ADNIN_USER_NAME" , default = "Admin user")
+ADMIN_USER_EMAIL = config("ADMIN_USER_EMAIL" , default = None)
+
+MANAGERS=[]
+ADMINS=[]
+
+if all([ADMIN_USER_NAME, ADMIN_USER_EMAIL]):
+    ADMINS += [
+        (f'{ADMIN_USER_NAME}', f'{ADMIN_USER_EMAIL}')
+    ]
+    MANAGERS=ADMINS
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DJANGO_DEBUG", cast=bool)
 
@@ -49,15 +73,28 @@ INSTALLED_APPS = [
     
     #my-apps
     "visits",
+    "commando",
+    "auths",
+
+    #third-party-apps
+    "allauth_ui",
+    'allauth',
+    'allauth.account',
+    "widget_tweaks",
+    "slippers",
+    
+    
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
        
@@ -128,6 +165,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django aalauth Config
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "[CFE]"
+AUTHENTICATION_BACKENDS = [
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -159,6 +215,7 @@ STATICFILES_DIRS = [
 #local-cdn
 
 STATIC_ROOT = BASE_DIR / "local-cdn"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
